@@ -19,7 +19,7 @@ import requests.auth
 # project imports
 import common
 
-def getAppListBatch(url, parameters):
+def get_app_list_batch(url, parameters):
     """
     Getting application list data in batches, since IStoreService
     has limited max output
@@ -39,7 +39,7 @@ def getAppListBatch(url, parameters):
         last_appid = False
     return more_results, steam_id, last_appid
 
-def getAppList():
+def get_app_list():
     """
     Getting the list of applications using Steam IStoreService
     Use https://steamapi.xpaw.me/#IStoreService/GetAppInfo as a reference
@@ -48,7 +48,6 @@ def getAppList():
     Example of a single app data:
     "appid":10,"name":"Counter-Strike","last_modified":1602535893,"price_change_number":13853601
     """
-
     url = 'https://api.steampowered.com/IStoreService/GetAppList/v1/?'
     APIKey = common.get_api_key()
     parameters = {'key': APIKey,
@@ -57,7 +56,7 @@ def getAppList():
     begin = True
     # from the request we get the more_results flag and also the last_appid, so we use them for the next requests.
     while (more_results):
-        more_results, steam_ids, last_appid = getAppListBatch(url, parameters)
+        more_results, steam_ids, last_appid = get_app_list_batch(url, parameters)
         parameters['last_appid'] = last_appid
         if (begin):
             steam_allids = steam_ids

@@ -29,10 +29,10 @@ def get_api_key():
         String containing Steam dev API key. Empty if none parsed.
     """
     try:
-        with open('../data/_credentials/steam_key.txt') as f:
+        with open('./data/_credentials/steam_key.txt') as f:
             api_key = f.read()
     except:
-        api_key = ''
+        raise("Error getting API Key")
     return api_key
 
 def get_proxies():
@@ -48,13 +48,16 @@ def get_proxies():
         dictionary of proxies. None if none parsed
     """
     try:
-        with open('../data/_credentials/proxies.txt', 'r') as f:
+        with open('./data/_credentials/proxies.txt', 'r') as f:
             proxies = eval(f.read())
         if not isinstance(proxies, dict):
             proxies = None
     except:
         proxies = None
     return proxies
+
+def get_download_path():
+    return './scripts/temp/'
 
 def get_request(url, parameters=None, steamspy=False, proxies = None):
     """Return json-formatted response of a get request using optional parameters.
@@ -86,7 +89,7 @@ def get_request(url, parameters=None, steamspy=False, proxies = None):
         print('\rRetrying.' + ' '*10)
         
         # recursively try again
-        return get_request(url, parameters, steamspy)
+        return get_request(url, parameters, steamspy, proxies)
     
     if response:
         return response.json()
