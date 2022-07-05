@@ -109,7 +109,18 @@ Indexes
 """
 
 def reset_index(download_path, index_filename):
-    """Reset index in file to 0."""
+    """
+    Reset index in file to 0.
+
+    Parameters
+    ----------
+    download_path : string
+    index_filename : string
+
+    Returns
+    -------
+    none
+    """
     rel_path = os.path.join(download_path, index_filename)
     
     f = open(rel_path, 'w')
@@ -117,7 +128,19 @@ def reset_index(download_path, index_filename):
         
 
 def get_index(download_path, index_filename):
-    """Retrieve index from file, returning 0 if file not found."""
+    """
+    Retrieve index from file, returning 0 if file not found.
+
+    Parameters
+    ----------
+    download_path : string
+    index_filename : string
+    Returns
+    -------
+    integer
+        index written in the first line of the index_filename.
+        0 if error
+    """
     try:
         rel_path = os.path.join(download_path, index_filename)
         with open(rel_path, 'r') as f:
@@ -131,7 +154,18 @@ def get_index(download_path, index_filename):
 
 
 def prepare_data_file(download_path, filename, index, columns):
-    """Create file and write headers if index is 0."""
+    """
+    Create file and write headers if index is 0.
+
+    Parameters
+    ----------
+    download_path : string
+    index_filename : string
+
+    Returns
+    -------
+    none
+    """
     if index == 0:
         rel_path = os.path.join(download_path, filename)
 
@@ -147,29 +181,25 @@ def get_app_data(app_list, start, stop, parser, pause, errors_list,
                  download_appid = False, last_modified = False):
     """Return list of app data generated from parser.
     
-    parser : function to handle request
+    Parameters
+    ----------
+    app_list : dataframe of appid and name
+    start : starting index in app_list slice
+    stop : ending index in app_list slice
+    parser : custom function to format request
+    pause : time to wait after each api request
+    errors_list : list to store appid errors
     
-    TODO:
-    download_id - add id from app_list for the downloaded app
-    last_modified - add last_modified for the downloaded app
+    Keyword arguments
+    -----------------
+    download_appid : add id from app_list for the downloaded app
+    last_modified : add last_modified for the downloaded app
     
+    Returns
+    -------
+    list with application data
     """
     app_data = []
-    """
-    # iterate through each row of app_list, confined by start and stop
-    for index, appid in app_list[start:stop].iteritems():
-        print('Current index: {}'.format(index), end='\r')
-
-        # retrive app data for a row, handled by supplied parser, and append to list
-        try:
-            data = parser(appid)
-        except Exception as ex:
-            errors_list.append(appid)
-            print('\nError getting data for {} with exception {}\n'.format(appid, type(ex).__name__))
-        app_data.append(data)
-
-        time.sleep(pause) # prevent overloading api with requests
-    """
     # iterate through each row of app_list, confined by start and stop
     for index, row in app_list[start:stop].iterrows():
         print('Current index: {}'.format(index), end='\r')
@@ -197,6 +227,9 @@ def process_batches(parser, app_list, download_path, data_filename, index_filena
                     download_appid = False, last_modified = False):
     """Process app data in batches, writing directly to file.
     
+    
+    Parameters
+    ----------
     parser : custom function to format request
     app_list : dataframe of appid and name
     download_path : path to store data
@@ -205,16 +238,18 @@ def process_batches(parser, app_list, download_path, data_filename, index_filena
     errors_list : list to store appid errors
     columns : column names for file
     
-    Keyword arguments:
-    
+    Keyword arguments
+    -----------------
     begin : starting index (get from index_filename, default 0)
     end : index to finish (defaults to end of app_list)
     batchsize : number of apps to write in each batch (default 100)
     pause : time to wait after each api request (defualt 1)
-    download_id - add id from app_list for the downloaded app
-    last_modified - add last_modified for the downloaded app
+    download_appid : add id from app_list for the downloaded app
+    last_modified : add last_modified for the downloaded app
     
-    returns: none
+    Returns
+    -------
+    none
     """
     print('Starting at index {}:\n'.format(begin))
     
