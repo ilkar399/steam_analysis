@@ -17,6 +17,14 @@ download_path = './scripts/test/'
 def get_app_list(verbose = False):
     """
     Testing getting application list
+
+    Parameters
+    ----------
+    verbose : verbose output
+
+    Returns
+    bool : 
+        True if no errors, otherwise False
     """
     # Downloading application list
     try:
@@ -38,6 +46,21 @@ def get_app_list(verbose = False):
         print(f'Null price change: {price_change_na}')
     if (ids_count < 10000):
         return False
+    return True
+
+def storefront_download(short = False, verbose = False):
+    """
+    Testing Steam Storefront application download
+
+    Parameters
+    ----------
+    short : bool, short/long test (100/1000 application sample)
+    verbose : verbose output
+
+    Returns
+    bool : 
+        True if no errors, otherwise False
+    """
     return True
 
 def all(verbose = False):
